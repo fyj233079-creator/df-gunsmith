@@ -1,4 +1,6 @@
-# 无服务器方案：GitHub Actions 每 10 分钟采集一次 → 提交数据 → 发布到 GitHub Pages
+# 无服务器方案：GitHub Actions 每 10 分钟采集一次 → 发布到 GitHub Pages
+# 采集结果保存在 Actions 缓存里（不提交进仓库，避免仓库膨胀和并发提交冲突）；
+# 缓存丢失时会从仓库里的 public/data 种子数据继续，firstSeen 不受影响。
 # 使用：仓库 Settings → Pages → Source 选 "GitHub Actions"；
 #       如需 orzice 数据，在 Settings → Secrets → Actions 添加 ORZICE_TOKEN。
 name: collect
@@ -9,10 +11,10 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["public/index.html", "data/manual.json", "src/**"]
+    paths: ["public/**", "data/manual.json", "src/**", ".github/workflows/**"]
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -23,24 +25,37 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Restore data
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            public/data
+            data/cache
+          key: dfg-data-${{ github.run_id }}
+          restore-keys: dfg-data-
       - name: Collect
         env:
           ORZICE_TOKEN: ${{ secrets.ORZICE_TOKEN }}
           ORZICE_BLACKTIDE: ${{ vars.ORZICE_BLACKTIDE }}
         run: node src/cli.js
-      - name: Commit data
-        run: |
-          git config user.name "gunsmith-bot"
-          git config user.email "gunsmith-bot@users.noreply.github.com"
-          git add public/data data/cache
-          git diff --cached --quiet || git commit -m "data: $(date -u +%FT%TZ)"
-          git push
+      - name: Save data
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            public/data
+            data/cache
+          key: dfg-data-${{ github.run_id }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
-      - uses: actions/deploy-pages@v4
+      - id: deploy
+        uses: actions/deploy-pages@v4
