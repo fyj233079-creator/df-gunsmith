@@ -1,0 +1,4 @@
+{"code":0,"msg":"成功","count":2,"data":[
+{"id":1440,"iid":481,"oid":181,"objectID":18010000016,"objectName":"PKM通用机枪","name":"猛攻PKM","solutionCode":"PKM通用机枪-烽火地带-6G94D100FHI6PKF6C3P0U","pic":"https://example.invalid/p.png","authorNickname":"昊天","authorComment":"低成本猛攻","price":231000,"zb":0,"likeNum":40,"applyNum":1200,"solutionType":"gun","m_type":"轻机枪","properties_data":[{"change":"+5","color":"","name":"后坐力控制","value":66}]},
+{"id":1441,"objectName":"M7战斗步枪","name":"猛攻专用M7","solutionCode":"M7战斗步枪-烽火地带-6KSCKI00EVDT6M6LB8UJ1","pic":"","authorNickname":"昊天","authorComment":"","price":456000,"likeNum":10,"applyNum":300,"solutionType":"gun","m_type":"步枪","properties_data":[]}
+]}

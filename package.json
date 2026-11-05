@@ -1,0 +1,13 @@
+{
+  "name": "df-gunsmith",
+  "version": "1.0.0",
+  "description": "三角洲行动改枪码实时聚合：多源采集 + 去重 + 实时推送",
+  "type": "module",
+  "private": true,
+  "engines": { "node": ">=18.17" },
+  "scripts": {
+    "start": "node src/server.js",
+    "collect": "node src/cli.js",
+    "test": "node --test test/*.test.js"
+  }
+}

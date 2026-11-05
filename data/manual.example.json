@@ -1,0 +1,11 @@
+[
+  {
+    "code": "M4A1突击步枪-烽火地带-6XXXXXXXXXXXXXXXXXXXX",
+    "title": "示例：战队自用 M4",
+    "price": "18W",
+    "author": "你的战队",
+    "desc": "复制为 manual.json 后编辑；code 必填，其余可选。mode 不填时从改枪码前缀识别",
+    "mode": "烽火地带",
+    "category": "步枪"
+  }
+]
